@@ -121,7 +121,7 @@ def start_chromium(url):
 with socketserver.TCPServer(("", FDPORT), MyHandler) as httpd:
   # start initial chromium window 3 seconds after handling requests
   threading.Timer(3, 
-    start_chromium, f"http://localhost:{FDPORT}/display").start()     
+    start_chromium, args=[f"http://localhost:{FDPORT}/display"]).start()     
   try:
     print(f"Serving at port {FDPORT}")
     httpd.serve_forever()
