@@ -18,7 +18,7 @@ cat <<END_AUTOSTART >$TMP
 [Desktop Entry]
 Type=Application
 Name=FTCdisp
-Exec=sh -c "cd $PWD; /usr/bin/python3 ftcdisp.py >>server.log 2>&1 &"
+Exec=sh -c "cd $PWD; systemd-inhibit --what=idle /usr/bin/python3 ftcdisp.py >>server.log 2>&1 &"
 Terminal=true
 END_AUTOSTART
 echo "  Contents of $TMP:"
