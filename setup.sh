@@ -2,8 +2,8 @@
 
 echo "1. Raspi-config settings..."
   config_rpi() {
-    printf "  %-40s # %s\n" "sudo raspi-config $1 $2" "$3"
-    sudo raspi-config "$1" "$2"
+    printf "  %-40s # %s\n" "sudo raspi-config nonint $1 $2" "$3"
+    sudo raspi-config nonint "$1" "$2"
   }
 
 while read cfg arg1 rest
