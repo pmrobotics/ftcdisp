@@ -3,7 +3,7 @@
 echo "1. Raspi-config settings..."
   config_rpi() {
     printf "  %-40s # %s\n" "sudo raspi-config $1 $2" "$3"
-    # sudo raspi-config "$1" "$2"
+    sudo raspi-config "$1" "$2"
   }
 
 while read cfg arg1 rest
@@ -19,7 +19,7 @@ END_RASPI_CONFIG
 echo "2. Disable services..."
   config_svc() {
     printf "  %-40s # %s\n" "sudo systemctl $1 $2" "$3"
-    # sudo systemctl "$1" "$2"
+    sudo systemctl "$1" "$2"
   }
 while read cmd svc rest
 do
@@ -33,7 +33,7 @@ END_RASPI_SERVICE
 PKGS="wlrctl xdotool"
 echo "3. Install wlrctl/xdotool (enables mouse click for audio)..."
 echo "  sudo apt satisfy $PKGS"
-# sudo apt satisfy $PKGS
+sudo apt satisfy $PKGS
 
 echo "4. Set up autostart file..."
 TMP="/var/tmp/ftcdisp.desktop"
