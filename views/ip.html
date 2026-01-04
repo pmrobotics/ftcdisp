@@ -1,0 +1,8 @@
+{% for ip in IP_ADDR if ip[0] != 'lo' %}
+  <div> 
+    {% if ip[1] == 'UP' %}
+      <span class="ipaddr">{{ ip[2] }}:{{ FDPORT }}</span> 
+    {% endif %} 
+    {{ ip[0] }} {{ ip[1] }} 
+  </div>
+{% endfor %}
