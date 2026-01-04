@@ -63,8 +63,7 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
       try:
         subprocess.run(["/usr/bin/pkill", "chromium"])
         time.sleep(1)
-        subprocess.Popen(["/usr/bin/chromium", "--kiosk", "--same-tab",
-            "--autoplay-policy=no-user-gesture-required",
+        start_chromium(
             f"http://{context['httpAddr']}/event/{context['eventCode']}/display"
             f"?eventcode={context['eventCode']}"
             f"&name={context['displayName']}"
@@ -72,8 +71,7 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
             f"&bindToField={context['bindToField']}"
             f"&allianceOrientation={context['allianceOrientation']}"
             f"&mute=true"
-          ], 
-          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        )
       except Exception as e:
         self.do_exception()
     return self.do_form(context)
@@ -108,12 +106,13 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
     self.end_headers()
     self.wfile.write("Mouse clicked".encode('utf-8'))
 
-def chromium_start():
+def start_chromium(url):
   print("Starting chromium kiosk display")
   subprocess.Popen(["/usr/bin/chromium", "--kiosk", 
       "--autoplay-policy=no-user-gesture-required",
       "--disable-session-crashed-bubble",
-      f"http://localhost:{FDPORT}/display"
+      "--password-store=basic",
+      url
     ], 
     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
@@ -121,7 +120,8 @@ def chromium_start():
 # subprocess.run(["/usr/bin/pkill", "chromium"])
 with socketserver.TCPServer(("", FDPORT), MyHandler) as httpd:
   # start initial chromium window 3 seconds after handling requests
-  threading.Timer(3, chromium_start).start()     
+  threading.Timer(3, 
+    start_chromium, f"http://localhost:{FDPORT}/display").start()     
   try:
     print(f"Serving at port {FDPORT}")
     httpd.serve_forever()
