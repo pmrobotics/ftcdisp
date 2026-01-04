@@ -6,7 +6,7 @@ then
   scripts/setup-raspi.sh
 fi
 
-PKGS="python3-wakepy python3-jinja2 wlrctl xdotool"
+PKGS="python3-jinja2 wlrctl xdotool"
 echo "* Install wlrctl/xdotool (enables mouse click for audio)..."
 echo "  sudo apt satisfy $PKGS"
 sudo apt satisfy $PKGS
