@@ -54,6 +54,7 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
       self.do_click(context)
     else:
       self.do_display(context)
+      viewCount += 1
 
   def do_display(self, context):
     print(context)
@@ -97,7 +98,6 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
     self.send_header('Content-type', 'text/html')
     self.end_headers()
     self.wfile.write(html.encode('utf-8'))
-    viewCount += 1
 
   def do_click(self, context):
     # wayland click
