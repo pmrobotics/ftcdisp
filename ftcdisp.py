@@ -15,6 +15,7 @@ viewCount = 0;
 
 class MyHandler(http.server.SimpleHTTPRequestHandler):
   def do_GET(self):
+    global viewCount
     parsed_url = urlparse(self.path)
     qs = parse_qs(parsed_url.query)
     result = subprocess.run(["ip", "-br", "address"], capture_output=True,
