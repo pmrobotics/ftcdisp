@@ -11,6 +11,7 @@ import re
 FDPORT = int(os.getenv('FDPORT', 8080))
 TEMPLATE_DIR = "."
 env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
+viewCount = 0;
 
 class MyHandler(http.server.SimpleHTTPRequestHandler):
   def do_GET(self):
@@ -32,6 +33,7 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
       'SERVER_ADDR': self.request.getsockname()[0],
       'IP_ADDR': IP_ADDR,
       'FDPORT': FDPORT,
+      'viewCount': viewCount,
       'httpAddr': '',
       'eventCode': '',
       'displayName': 'Field 1',
@@ -95,6 +97,7 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
     self.send_header('Content-type', 'text/html')
     self.end_headers()
     self.wfile.write(html.encode('utf-8'))
+    viewCount += 1
 
   def do_click(self, context):
     # wayland click
