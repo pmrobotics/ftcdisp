@@ -111,6 +111,7 @@ def start_chromium(url):
   subprocess.Popen(["/usr/bin/chromium", "--kiosk", 
       "--autoplay-policy=no-user-gesture-required",
       "--disable-session-crashed-bubble",
+      "--incognito",
       "--password-store=basic",
       url
     ], 

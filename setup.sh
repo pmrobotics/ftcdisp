@@ -6,10 +6,16 @@ then
   scripts/setup-raspi.sh
 fi
 
+if grep -q "ROCK3 Model C" proc/device-tree/model
+then 
+  echo "* Setting up for Raspberry Pi environment"
+  scripts/setup-rock3c.sh
+fi
+
 PKGS="python3-jinja2 wlrctl xdotool"
 echo "* Install wlrctl/xdotool (enables mouse click for audio)..."
-echo "  sudo apt satisfy $PKGS"
-sudo apt satisfy $PKGS
+echo "  sudo apt --ignore-missing satisfy $PKGS"
+sudo apt --ignore-missing satisfy $PKGS
 
 echo "* Set up autostart file..."
 TMP="/var/tmp/ftcdisp.desktop"
