@@ -38,7 +38,7 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
       'httpAddr': '',
       'eventCode': '',
       'displayName': 'Field 1',
-      'displayType': 'Field',
+      'displayType': 'field',
       'bindToField': '(all)',
       'allianceOrientation': 'flipped',
     }
