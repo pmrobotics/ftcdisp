@@ -14,8 +14,9 @@
     #iplist { text-align: center; } 
     .ipaddr { font-size: 6rem; }
   </style>
+  <title>{{ displayName }} - {{ SERVER_ADDR }}</title>
 <body>
-{% if viewCount > 0 %}
+{% if (not local) or (viewCount > 0) %}
   <form method="GET" action="/display">
     <div class="container">
       <div class="col1"><label>FTC Live network address</label></div>
