@@ -58,7 +58,6 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
       viewCount += 1
 
   def do_display(self, context):
-    print(context)
     if context['httpAddr'] > '' and context['eventCode'] > '' :
       try:
         subprocess.run(["/usr/bin/pkill", "chromium"])
@@ -107,27 +106,28 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
     self.wfile.write("Mouse clicked".encode('utf-8'))
 
 def start_chromium(url):
-  print("Starting chromium kiosk display")
+  print("Starting chromium kiosk display", flush=True)
   subprocess.Popen(["/usr/bin/chromium", "--kiosk", 
       "--autoplay-policy=no-user-gesture-required",
       "--disable-session-crashed-bubble",
       "--incognito",
       "--password-store=basic",
+      "--temp-profile",
       url
     ], 
     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-# print("Killing existing chromium processes") 
+# print("Killing existing chromium processes", flush=True) 
 # subprocess.run(["/usr/bin/pkill", "chromium"])
 with socketserver.TCPServer(("", FDPORT), MyHandler) as httpd:
   # start initial chromium window 3 seconds after handling requests
   threading.Timer(3, 
     start_chromium, args=[f"http://localhost:{FDPORT}/display"]).start()     
   try:
-    print(f"Serving at port {FDPORT}")
+    print(f"Serving at port {FDPORT}", flush=True)
     httpd.serve_forever()
   except KeyboardInterrupt:
-    print(f"Received SIGINT")
+    print(f"Received SIGINT", flush=True)
     httpd.shutdown()
     sys.exit(0)
 
