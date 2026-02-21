@@ -12,7 +12,7 @@ then
   scripts/setup-rock3c.sh
 fi
 
-PKGS="python3-jinja2 wlrctl xdotool"
+PKGS="python3-jinja2 wlrctl xdotool cec-utils"
 echo "* Install wlrctl/xdotool (enables mouse click for audio)..."
 echo "  sudo apt --ignore-missing satisfy $PKGS"
 sudo apt --ignore-missing satisfy $PKGS
