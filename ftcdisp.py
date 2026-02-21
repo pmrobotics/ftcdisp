@@ -7,6 +7,7 @@ import threading
 import time
 import os
 import re
+import sys
 
 FDPORT = int(os.getenv('FDPORT', 8080))
 TEMPLATE_DIR = "."
@@ -41,6 +42,7 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
       'displayType': 'field',
       'bindToField': '(all)',
       'allianceOrientation': 'flipped',
+      'source': 'ftclive',
     }
     l = list(context.keys())
     for key in l:
@@ -53,11 +55,27 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
       self.do_ip(context)
     elif parsed_url.path == "/click":
       self.do_click(context)
+    elif context['source'] == "nexus":
+      self.do_nexus(context)
+    elif context['source'] == "ftcscoring":
+      self.do_ftcscoring(context)
     else:
-      self.do_display(context)
+      self.do_ftclive(context)
       viewCount += 1
 
-  def do_display(self, context):
+  def do_nexus(self, context):
+    if context['eventCode'] > '' :
+      try:
+        subprocess.run(["/usr/bin/pkill", "chromium"])
+        time.sleep(1)
+        start_chromium(
+            f"https://ftc.nexus/en/event/2025{context['eventCode'].lower()}/display/pit"
+        )
+      except Exception as e:
+        self.do_exception()
+    return self.do_form(context)
+
+  def do_ftclive(self, context):
     if context['httpAddr'] > '' and context['eventCode'] > '' :
       try:
         subprocess.run(["/usr/bin/pkill", "chromium"])
@@ -70,6 +88,20 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
             f"&bindToField={context['bindToField']}"
             f"&allianceOrientation={context['allianceOrientation']}"
             f"&mute=true"
+        )
+      except Exception as e:
+        self.do_exception()
+    return self.do_form(context)
+
+  def do_ftcscoring(self, context):
+    if context['eventCode'] > '' :
+      try:
+        subprocess.run(["/usr/bin/pkill", "chromium"])
+        time.sleep(1)
+        start_chromium(
+            f"https://ftc-scoring.firstinspires.org/event/{context['eventCode']}/display/pit"
+            f"?type=pit&bindToField=all"
+	# &scoringBarLocation=bottom&allianceOrientation=standard&mute=false&muteRandomizationResults=false&fieldStyleTimer=true&overlay=false&overlayColor=%2300FF00&allianceSelectionStyle=classic&awardsStyle=overlay&dualDivisionRankingStyle=sideBySide&rankingsFontSize=larger&showMeetRankings=false&rankingsAllTeams=true"
         )
       except Exception as e:
         self.do_exception()
@@ -106,10 +138,11 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
     self.wfile.write("Mouse clicked".encode('utf-8'))
 
 def start_chromium(url):
-  print("Starting chromium kiosk display", flush=True)
+  print(f"Starting chromium kiosk display @ {url}", flush=True)
   subprocess.Popen(["/usr/bin/chromium", "--kiosk", 
       "--autoplay-policy=no-user-gesture-required",
       "--disable-session-crashed-bubble",
+      "--disable-third-party-cookies-blocking",
       "--incognito",
       "--password-store=basic",
       "--temp-profile",

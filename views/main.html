@@ -6,10 +6,13 @@
   {% endmacro %}
   <style>
     body, input, select { font-size: 2rem; font-family: sans-serif; }
-    .container { display: grid; grid-template-columns: 12em 520px 5em; grid-row-gap: 8px; align-items: center; }
+    .container { display: grid; grid-template-columns: 12em 520px 10em; grid-row-gap: 8px; align-items: center; }
     select, option, input { width: 500px; }
     .col3 { font-size: 1.6rem; color: #808080; }
+    .colspan2 { grid-column: span 2; }
+    .colspan3 { grid-column: span 3; }
     input[type="checkbox"] { width: auto; }
+    input[type="radio"] { width: auto; }
    
     #iplist { text-align: center; } 
     .ipaddr { font-size: 6rem; }
@@ -19,14 +22,27 @@
 {% if (not local) or (viewCount > 0) %}
   <form method="GET" action="/display">
     <div class="container">
-      <div class="col1"><label>FTC Live network address</label></div>
-      <div class="col2"><input type="text" id="httpAddr" name="httpAddr" value={{ httpAddr }}></div>
-      <div class="col3"><label>10.0.0.10</label></div>
-  
       <div class="col1"><label>Event code</label></div>
       <div class="col2"><input type="text" id="eventCode" name="eventCode" value="{{ eventCode }}"></div>
-      <div class="col3"><label>ustxfms</label></div>
-  
+      <div class="col3"><label>eg: ustxfms</label></div>
+
+      <div class="col1"><label>Data source</label></div>
+      <div class="col2">
+        <select id="source" name="source">
+          {{ option(source, "ftclive", "FTCLive (local scoring)") }}
+          {{ option(source, "nexus", "Nexus Pit Display") }}
+          {{ option(source, "ftcscoring", "ftc-scoring Pit Display") }}
+        </select></div>
+      <div class="col3"></div>
+
+      <div class="col1">&nbsp;</div>
+      <div class="col2"></div>
+      <div class="col3"></div>
+
+      <div class="col1"><label>FTCLive (local) address:</label></div>
+      <div class="col2"><input type="text" id="httpAddr" name="httpAddr" value={{ httpAddr }}></div>
+      <div class="col3"><label>eg: 10.0.0.10</label></div>
+
       <div class="col1"><label>Display Name</label></div>
       <div class="col2"><input type="text" id="displayName" name="displayName" value="{{ displayName }}"></div>
       <div class="col3"></div>
