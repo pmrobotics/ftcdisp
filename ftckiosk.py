@@ -13,7 +13,7 @@ import configparser
 config = configparser.ConfigParser(allow_unnamed_section=True)
 config.read_string("FDPORT=8080")
 try:
-  config.read('/boot/firmware/ftcdisp.ini')
+  config.read('/boot/firmware/ftckiosk.ini')
 except FileNotFoundError:
   pass
 
